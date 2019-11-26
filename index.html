@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Demo</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./vanillaSelectChooser.css">
+    <!-- internal css -->
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: 0;
+        }
+
+        .darkRed {
+            color: darkred;
+        }
+
+        .darkBlue {
+            color: darkblue;
+        }
+
+        .navbar {
+            position: relative;
+            border: 1px solid #080808;
+            background-color: #222;
+            background-image: linear-gradient(to bottom,#3c3c3c 0,#222 100%);
+            background-repeat: repeat-x;
+            border-radius: 4px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-brand {
+            float: left;
+            padding: 14px 15px;
+            font-size: 18px;
+            line-height: 20px;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #fff;
+        }
+
+        .navbar-links {
+            font-size: 14px;
+            line-height: 20px;
+            position: relative;
+            margin: 0;
+        }
+
+            .navbar-links li {
+                cursor: pointer;
+                text-decoration: none;
+            }
+
+            .navbar-links li {
+                display: inline-block;
+                min-width: 120px;
+                text-align: center;
+                margin-top: 15px;
+            }
+
+                .navbar-links li.active {
+                    background-image: #080808;
+                    background: #080808;
+                    color: #fff;
+                    height: 100%;
+                    padding-top: 15px;
+                    padding-bottom: 15px;
+                    margin: 0;
+                }
+
+        a {
+            color: #9d9d9d;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            .navbar-brand {
+                width: 100%;
+            }
+
+            .navbar-links {
+                padding-left: 0;
+            }
+
+            button.demo {
+                margin-right: 100% !important;
+            }
+        }
+
+        #container {
+            padding-top: 30px;
+            padding-left: 50px;
+            width: 90%;
+            font-size: 14px;
+        }
+
+        .demo-zone {
+            display: block;
+            width: 100%;
+            min-height: 200px;
+        }
+
+        .btns-active, .btns-inactive {
+            margin-top: 20px;
+        }
+
+        label {
+            display: inline-block;
+            min-width: 220px;
+            width: 220px;
+        }
+
+        button.demo {
+            margin-right: 0;
+            margin-left: 4px;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border-radius: 4px;
+            z-index: 1;
+            color: #333;
+            background: white;
+            background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+            border: 1px solid #ccc !important;
+            color: #333;
+            line-height: 20px;
+            font-size: 14px;
+            padding: 4px 12px;
+            margin-bottom: 2px;
+        }
+
+            button.demo:hover {
+                background-image: linear-gradient(to top,#fff 0,#e0e0e0 100%);
+            }
+
+        .presentation {
+            background: #eee;
+            color: #2e44b9;
+            border: 1px solid grey;
+            border-radius: 8px;
+            line-height: 20px;
+            padding: 8px;
+            margin-bottom: 40px;
+            width: 90%;
+            max-width: 800px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    Experiments with vanilla js
+                </a>
+            </div>
+            <ul class="navbar-links">
+                <li id="vanillaSelectBox" class="active"><a href="#vanillaSelectBox">vanillaSelectBox</a></li>
+                <li id="blog"><a href="https://philippemarcmeyer.github.io#vanillajs">Github Blog</a></li>
+                <li id="repos"><a href="https://github.com/PhilippeMarcMeyer/vanillaSelectBox">Github repos</a></li>
+            </ul>
+    </nav>
+<div id="container">
+	<div class="demo-zone" id="demo">
+		<select id="brands" multiple="" size="20" style="display: none;"><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Alpine">Alpine</option><option value="Aston Martin" selected="true">Aston Martin</option><option value="Audi" selected="true">Audi</option><option value="Bentley" selected="true">Bentley</option><option value="BMW" selected="true">BMW</option><option value="Cadillac" selected="true">Cadillac</option><option value="Chevrolet">Chevrolet</option><option value="Citroën">Citroën</option><option value="Cupra">Cupra</option><option value="DACIA">DACIA</option><option value="DS">DS</option><option value="Ferrari">Ferrari</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="KIA">KIA</option><option value="Lamborghini">Lamborghini</option><option value="Land Rover" selected="true">Land Rover</option><option value="Lexus">Lexus</option><option value="Lotus">Lotus</option><option value="Maserati">Maserati</option><option value="Mazda">Mazda</option><option value="McLaren">McLaren</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="MINI">MINI</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Rolls-Royce">Rolls-Royce</option><option value="SEAT">SEAT</option><option value="Skoda">Skoda</option><option value="smart">smart</option><option value="Ssangyong">Ssangyong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select>
+	</div>	
+</div>
+
+<script src="./vanillaSelectChooser.js"></script>
+<script>
+   let chooser = new vanillaSelectChooser("#brands",{minWidth:200,maxHeight:500});
+
+        </script>
+</html>
