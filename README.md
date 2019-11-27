@@ -5,9 +5,9 @@ https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html
 
 
 ### History :
+v0.20 : Use of ctrl and shift keys to mimic a select + button add
 
 v0.10 : First fully working version
-v0.20 : Use of ctrl and shift keys to mimic a select + button add
 
 v0.01 : first prototype Work in progress
 
