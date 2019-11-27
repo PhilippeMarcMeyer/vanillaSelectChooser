@@ -5,6 +5,7 @@ vanillaSelectChooser.js
 Takes a select multiple drop down and transforms it into 2 lists : to choose on the left, chosen on the right
 v0.01 : first prototype Work in progress
 v0.10 : First fully working version
+v0.20 : Use of ctrl and shift keys to mimic a select + button add
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
 function vanillaSelectChooser(domSelector, options) {
@@ -12,7 +13,12 @@ function vanillaSelectChooser(domSelector, options) {
     this.domSelector = domSelector;
     this.root = document.querySelector(domSelector)
 	this.options = null;
+	this.lastValue = null;
+	this.isShiftDown = false;
+	this.isCtrlDown = false;
     this.userOptions = {
+		addButtonTitle : "&#x2B86;",
+		addButtonWidth : 60,
         minWidth: 80,
         maxHeight: 400,
 		gapBeetween :120,
@@ -62,12 +68,88 @@ function vanillaSelectChooser(domSelector, options) {
 		});
 		factory.filter();
 	}
-
-    this.init();
-}
-
-    vanillaSelectChooser.prototype.init = function () {
-		let factory = this;
+	
+	this.handleAddBtnClick = function(event){
+		let leftListChosen = factory.listLeft.querySelectorAll("li.chosen");
+		let chosenList = [];
+		Array.prototype.slice.call(leftListChosen).forEach(function (x) {
+			 let value = x.getAttribute("data-value");
+			chosenList.push(value);
+			 x.classList.remove("chosen");
+		});
+		Array.prototype.slice.call(factory.options).forEach(function (x) {
+			if(chosenList.indexOf(x.value) != -1){
+				x.setAttribute("selected", true);
+			}
+		});
+		factory.filter();
+	}
+	
+	this.handleSimpleClick = function(event){
+		let target = event.target;
+		let valueClicked = target.getAttribute("data-value");
+		let valueFrom = null
+		let valueTo = null;	
+		let doErase = true;
+		if(factory.isCtrlDown){
+			if(factory.isShiftDown){
+				if(factory.lastValue!=null){
+					valueFrom = factory.lastValue;
+					valueTo = valueClicked;
+				}
+			}else{
+				doErase =false;
+			}
+		}
+		factory.lastValue = valueClicked;
+		let leftList = factory.listLeft.querySelectorAll("li");
+		if(valueFrom != null && valueTo != null){
+			 let startReached = false;
+			 let endReached = false;
+			 let countThatOne = false;
+			 Array.prototype.slice.call(leftList).forEach(function (x) {
+				if(!x.classList.contains("hide")){
+				 let value = x.getAttribute("data-value");
+				 if(!startReached) {
+					 startReached = value == valueFrom || value == valueTo;
+				 }else{
+					if(startReached && !endReached){
+						endReached = value == valueFrom || value == valueTo;
+						if(endReached){ 
+							countThatOne = true;
+							factory.lastValue = value;
+						}
+					}	 
+				 }
+				 if(!startReached) {
+					 x.classList.remove("chosen");
+				 }else if(!endReached || countThatOne){
+					 x.classList.add("chosen");
+				 }else{
+					 x.classList.remove("chosen");
+				 }
+					countThatOne = false;
+				}
+			 });
+		}else{
+			Array.prototype.slice.call(leftList).forEach(function (x) {
+				 let value = x.getAttribute("data-value");
+			     if(valueClicked == value){
+					 if(x.classList.contains("chosen")){
+						x.classList.remove("chosen");
+					 }else{
+						x.classList.add("chosen");
+					 }
+				 }else{
+					 if(doErase){
+						x.classList.remove("chosen");
+					 }
+				 }
+			 });	
+		}
+	}
+	
+	this.init = function () {
 		if(!factory.root.hasAttribute("multiple")){
 			factory.root.setAttribute("multiple","multiple");
 		}
@@ -76,16 +158,13 @@ function vanillaSelectChooser(domSelector, options) {
         if (already) {
             already.remove();
         }
-		
-		
+		let centerMargins =  (factory.userOptions.gapBeetween - factory.userOptions.addButtonWidth)/2;
+
         this.main = document.createElement("div");
         this.root.parentNode.insertBefore(this.main, this.root.nextSibling);
         this.main.classList.add("vanilla-main");
-
-
-
         this.main.setAttribute("id", "main-zone-" + this.domSelector);
-		
+
 		this.leftSide =  document.createElement("div");
 		this.main.appendChild(this.leftSide);
 		this.leftSide.classList.add("vanilla-left");
@@ -102,6 +181,18 @@ function vanillaSelectChooser(domSelector, options) {
                 var y = this.scrollTop;
                 factory.titleLeft.style.top = y + "px";
             });
+		this.centerSide =  document.createElement("div");
+		this.main.appendChild(this.centerSide);
+		this.centerSide.classList.add("vanilla-center");
+		this.centerSide.setAttribute("style","display:inline-block;position:relative;float:left;overflow-y:hidden;");
+
+		this.addButton = document.createElement("button");
+		this.centerSide.appendChild(this.addButton);
+		this.addButton.classList.add("vanilla-btn");
+		this.addButton.setAttribute("style","width:"+factory.userOptions.addButtonWidth+"px;margin-left:"+centerMargins+"px;margin-top:35px;");
+		
+			
+		this.addButton.innerHTML = "&nbsp;"+this.userOptions.addButtonTitle+"&nbsp;"
 		
 		this.rightSide =  document.createElement("div");
 		this.main.appendChild(this.rightSide);
@@ -110,7 +201,7 @@ function vanillaSelectChooser(domSelector, options) {
 		this.rightSide.style.float = "left";
 		this.rightSide.style.minWidth = factory.userOptions.minWidth+"px";
 		this.rightSide.style.maxHeight = factory.userOptions.maxHeight+"px";
-		this.rightSide.style.marginLeft = factory.userOptions.gapBeetween+"px";
+		this.rightSide.style.marginLeft = centerMargins+"px";
 		
 		this.titleRight = document.createElement("div");
 		this.rightSide.appendChild(this.titleRight);
@@ -145,12 +236,12 @@ function vanillaSelectChooser(domSelector, options) {
             li2.setAttribute("data-text", text);
             li2.appendChild(document.createTextNode(text));
 			let span = document.createElement("span");
-			span.appendChild(document.createTextNode("x"));
+			span.innerHTML = "&nbsp;x&nbsp;"
 			li2.appendChild(span);
 			span.classList.add("vanilla-close");
 			
 			let span2 = document.createElement("span");
-			span2.innerHTML = "&#x2BC8;"
+			span2.innerHTML = " &#x2BC8; "
 			li.appendChild(span2);
 			span2.classList.add("vanilla-add");
         });
@@ -158,6 +249,7 @@ function vanillaSelectChooser(domSelector, options) {
 		 let leftList = factory.listLeft.querySelectorAll("li");
 		Array.prototype.slice.call(leftList).forEach(function (x) {
 		  x.addEventListener("dblclick", factory.handleListDoubleClick);
+		  x.addEventListener("click", factory.handleSimpleClick);		  
 		});
 		 let leftSign = factory.listLeft.querySelectorAll(".vanilla-add");
 		 Array.prototype.slice.call(leftSign).forEach(function (x) {
@@ -168,10 +260,36 @@ function vanillaSelectChooser(domSelector, options) {
 		Array.prototype.slice.call(rightSign).forEach(function (x) {
 		  x.addEventListener("click", factory.handleCloseClick);
 		});
+		
+		this.isShiftDown = false;
+		this.isCtrlDown = false;
+
+		document.body.onkeydown = function (e) {
+		   if (e.ctrlKey) {
+			  factory.isCtrlDown = true;
+		   }
+		   if(e.shiftKey){
+				factory.isShiftDown=true;
+		   }
+		}
+		document.body.onkeyup = function (e) {
+		   if (e.ctrlKey) {
+			  factory.isCtrlDown = false;
+			  factory.lastValue=null;
+		   }
+		   if(e.shiftKey){
+			  factory.isShiftDown=false;
+		   }
+		}
+		
+		this.addButton.addEventListener("click",factory.handleAddBtnClick)
     }
 
-    vanillaSelectChooser.prototype.filter = function () {
-		let factory = this; 
+	this.filter = function (chosenList) {
+		this.isShiftDown = false;
+		this.isCtrlDown = false;
+		factory.lastValue = null;
+		if(!chosenList) chosenList = [];
 		let selected = [];
 		    Array.prototype.slice.call(this.options).forEach(function (x) {
 		    let isSelected = x.hasAttribute("selected");
@@ -199,6 +317,10 @@ function vanillaSelectChooser(domSelector, options) {
         });
 		factory.privateSendChange();
 	}
+
+    this.init();
+}
+
 
     vanillaSelectChooser.prototype.privateSendChange = function () {
         let event = document.createEvent('HTMLEvents');
