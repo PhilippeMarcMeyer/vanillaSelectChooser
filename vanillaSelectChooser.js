@@ -190,9 +190,10 @@ function vanillaSelectChooser(domSelector, options) {
 		this.centerSide.appendChild(this.addButton);
 		this.addButton.classList.add("vanilla-btn");
 		this.addButton.setAttribute("style","width:"+factory.userOptions.addButtonWidth+"px;margin-left:"+centerMargins+"px;margin-top:35px;");
+		let btnSpan = document.createElement("span");
+		this.addButton.appendChild(btnSpan);
 		
-			
-		this.addButton.innerHTML = "&nbsp;"+this.userOptions.addButtonTitle+"&nbsp;"
+		btnSpan.setAttribute("class","arrow right");	
 		
 		this.rightSide =  document.createElement("div");
 		this.main.appendChild(this.rightSide);
@@ -241,7 +242,9 @@ function vanillaSelectChooser(domSelector, options) {
 			span.classList.add("vanilla-close");
 			
 			let span2 = document.createElement("span");
-			span2.innerHTML = " &#x2BC8; "
+			
+			span2.setAttribute("class","arrow-sml right");	
+
 			li.appendChild(span2);
 			span2.classList.add("vanilla-add");
         });

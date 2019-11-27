@@ -3,6 +3,28 @@
 	display:none !important;
 }
 
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  vertical-align:3px;
+}
+
+.arrow-sml {
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 2px;
+  margin-top:6px;
+}
+
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
 .vanilla-main{
 	font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
 	position: relative;
@@ -37,7 +59,7 @@
 	margin-bottom:2px;
 }
 
-.vanilla-close,.vanilla-add{
+.vanilla-close{
 	user-select:none;
 	cursor:pointer;
 	float:right;
@@ -47,6 +69,12 @@
 	padding:1px;
     color: #888;
     text-shadow: 0 1px 0 #fff;
+}
+
+.vanilla-add{
+	user-select:none;
+	cursor:pointer;
+	float:right;
 }
 
 .vanilla-close:hover,.vanilla-add:hover{
