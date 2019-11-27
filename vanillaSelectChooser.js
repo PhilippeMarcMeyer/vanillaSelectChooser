@@ -174,7 +174,7 @@ function vanillaSelectChooser(domSelector, options) {
 		
 		this.titleLeft = document.createElement("div");
 		this.leftSide.appendChild(this.titleLeft);
-		this.titleLeft.setAttribute("style","position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;padding-top:2px;user-select: none;  ")
+		this.titleLeft.setAttribute("style","z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;padding-top:2px;user-select: none;  ")
 		this.titleLeft.innerHTML = factory.userOptions.translations.available;
 		
 		 this.leftSide.addEventListener("scroll", function (e) {
@@ -206,7 +206,7 @@ function vanillaSelectChooser(domSelector, options) {
 		
 		this.titleRight = document.createElement("div");
 		this.rightSide.appendChild(this.titleRight);
-		this.titleRight.setAttribute("style","position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;padding-top:2px;user-select: none; ")
+		this.titleRight.setAttribute("style","z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;padding-top:2px;user-select: none; ")
 		this.titleRight.innerHTML = factory.userOptions.translations.chosen;
 		
 		 this.rightSide.addEventListener("scroll", function (e) {
