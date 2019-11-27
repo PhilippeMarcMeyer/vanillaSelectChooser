@@ -9,6 +9,32 @@
     <link rel="stylesheet" href="./vanillaSelectChooser.css">
     <!-- internal css -->
     <style>
+	
+	h5{
+	    color: #2e44b9;
+		font-weight: bold;
+		font-size: 24px;
+	}
+
+	p{
+		 color: #2e44b9;
+		font-size: 16px;
+	}
+	.vanilla-main{
+		  background-color: #f0f0f0;
+		  padding:40px;
+		  border-right: 1px solid #808080;
+		  border-bottom: 1px solid #808080;
+		  border-left: 1px solid #ccc;
+		  border-top: 1px solid #ccc;
+		  border-radius: 4px;
+	}
+	
+	.vanilla-main > div{
+
+		  border-right: 1px solid #808080;
+		  border-bottom: 1px solid #808080;
+	}
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             margin: 0;
@@ -97,7 +123,7 @@
         }
 
         #container {
-            padding-top: 30px;
+            padding-top: 0px;
             padding-left: 50px;
             width: 90%;
             font-size: 14px;
@@ -170,15 +196,40 @@
                 <li id="repos"><a href="https://github.com/PhilippeMarcMeyer/vanillaSelectBox">Github repos</a></li>
             </ul>
     </nav>
+	
 <div id="container">
+	<div style="padding:0">
+		<h5>vanillaSelectChooser </h5>
+		<p>Takes a select ! Results are available in the hidden select thru change event</p>
+	</div>
 	<div class="demo-zone" id="demo">
-		<select id="brands" multiple="" size="20" style="display: none;"><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Alpine">Alpine</option><option value="Aston Martin" selected="true">Aston Martin</option><option value="Audi" selected="true">Audi</option><option value="Bentley" selected="true">Bentley</option><option value="BMW" selected="true">BMW</option><option value="Cadillac" selected="true">Cadillac</option><option value="Chevrolet">Chevrolet</option><option value="Citroën">Citroën</option><option value="Cupra">Cupra</option><option value="DACIA">DACIA</option><option value="DS">DS</option><option value="Ferrari">Ferrari</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="KIA">KIA</option><option value="Lamborghini">Lamborghini</option><option value="Land Rover" selected="true">Land Rover</option><option value="Lexus">Lexus</option><option value="Lotus">Lotus</option><option value="Maserati">Maserati</option><option value="Mazda">Mazda</option><option value="McLaren">McLaren</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="MINI">MINI</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Rolls-Royce">Rolls-Royce</option><option value="SEAT">SEAT</option><option value="Skoda">Skoda</option><option value="smart">smart</option><option value="Ssangyong">Ssangyong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select>
+		<select id="brands" onChange="showChosen()" multiple="" size="20" style="display: none;"><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Alpine">Alpine</option><option value="Aston Martin" selected="true">Aston Martin</option><option value="Audi" selected="true">Audi</option><option value="Bentley" selected="true">Bentley</option><option value="BMW" selected="true">BMW</option><option value="Cadillac" selected="true">Cadillac</option><option value="Chevrolet">Chevrolet</option><option value="Citroën">Citroën</option><option value="Cupra">Cupra</option><option value="DACIA">DACIA</option><option value="DS">DS</option><option value="Ferrari">Ferrari</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="KIA">KIA</option><option value="Lamborghini">Lamborghini</option><option value="Land Rover" selected="true">Land Rover</option><option value="Lexus">Lexus</option><option value="Lotus">Lotus</option><option value="Maserati">Maserati</option><option value="Mazda">Mazda</option><option value="McLaren">McLaren</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="MINI">MINI</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Rolls-Royce">Rolls-Royce</option><option value="SEAT">SEAT</option><option value="Skoda">Skoda</option><option value="smart">smart</option><option value="Ssangyong">Ssangyong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select>
 	</div>	
 </div>
+<br/>
+<div style="margin-left:46px;" >
+<p>Chosen items from the select :</p>
+&nbsp;<div id="vanilla-result"></<div>
+<div/>
 
 <script src="./vanillaSelectChooser.js"></script>
 <script>
-   let chooser = new vanillaSelectChooser("#brands",{minWidth:200,maxHeight:500});
+let chooser = new vanillaSelectChooser("#brands",{minWidth:200,maxHeight:500});
+showChosen();
 
-        </script>
+function getSelectValues(){
+let values = [];
+	let options = document.querySelectorAll("#brands option");
+        Array.prototype.slice.call(options).forEach(function (x) {
+		if(x.hasAttribute("selected")){
+			values.push(x.value);
+		}
+		});
+	return values;
+}
+function showChosen(){
+	let values = getSelectValues();
+	document.getElementById("vanilla-result").innerHTML = values.join(",");
+}
+</script>
 </html>

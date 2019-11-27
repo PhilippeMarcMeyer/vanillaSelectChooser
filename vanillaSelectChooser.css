@@ -30,7 +30,23 @@
 	margin-bottom:2px;
 }
 
+.vanilla-close,.vanilla-add{
+	user-select:none;
+	cursor:pointer;
+	float:right;
+	font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    color: #888;
+    text-shadow: 0 1px 0 #fff;
+}
+
+
 .vanilla-main li:hover {
+	background: linear-gradient(#f5f5f5, #e8e8e8);
+}
+
+.vanilla-main li.selected {
 	background: linear-gradient(#f5f5f5, #e8e8e8);
 }
 

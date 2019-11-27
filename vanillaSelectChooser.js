@@ -4,7 +4,7 @@ Distributed under the MIT License
 vanillaSelectChooser.js
 Takes a select multiple drop down and transforms it into 2 lists : to choose on the left, chosen on the right
 v0.01 : first prototype Work in progress
-
+v0.10 : First fully working version
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
 function vanillaSelectChooser(domSelector, options) {
@@ -30,8 +30,29 @@ function vanillaSelectChooser(domSelector, options) {
             this.userOptions.translations = options.translations;
         }
     }
+	this.handleCloseClick = function(event){
+		let target = event.target;
+		let value = target.parentNode.getAttribute("data-value");
+		Array.prototype.slice.call(factory.options).forEach(function (x) {
+			if(x.value == value){
+				x.removeAttribute("selected");
+			}
+		});
+		factory.filter();
+	}
 	
-		this.handleListDoubleClick = function(event){
+	this.handleAddClick = function(event){
+		let target = event.target;
+		let value = target.parentNode.getAttribute("data-value");
+		Array.prototype.slice.call(factory.options).forEach(function (x) {
+			if(x.value == value){
+				x.setAttribute("selected", true);
+			}
+		});
+		factory.filter();
+	}
+	
+	this.handleListDoubleClick = function(event){
 		let target = event.target;
 		let value = target.getAttribute("data-value");
 		Array.prototype.slice.call(factory.options).forEach(function (x) {
@@ -123,14 +144,30 @@ function vanillaSelectChooser(domSelector, options) {
             li2.setAttribute("data-value", value);
             li2.setAttribute("data-text", text);
             li2.appendChild(document.createTextNode(text));
+			let span = document.createElement("span");
+			span.appendChild(document.createTextNode("x"));
+			li2.appendChild(span);
+			span.classList.add("vanilla-close");
+			
+			let span2 = document.createElement("span");
+			span2.innerHTML = "&#x2BC8;"
+			li.appendChild(span2);
+			span2.classList.add("vanilla-add");
         });
 		factory.filter();
 		 let leftList = factory.listLeft.querySelectorAll("li");
 		Array.prototype.slice.call(leftList).forEach(function (x) {
 		  x.addEventListener("dblclick", factory.handleListDoubleClick);
-
 		});
-
+		 let leftSign = factory.listLeft.querySelectorAll(".vanilla-add");
+		 Array.prototype.slice.call(leftSign).forEach(function (x) {
+		  x.addEventListener("click", factory.handleAddClick);
+		});
+		
+		 let rightSign = factory.listRight.querySelectorAll(".vanilla-close");
+		Array.prototype.slice.call(rightSign).forEach(function (x) {
+		  x.addEventListener("click", factory.handleCloseClick);
+		});
     }
 
     vanillaSelectChooser.prototype.filter = function () {
@@ -160,6 +197,7 @@ function vanillaSelectChooser(domSelector, options) {
 				 }
 			 });
         });
+		factory.privateSendChange();
 	}
 
     vanillaSelectChooser.prototype.privateSendChange = function () {
@@ -168,7 +206,6 @@ function vanillaSelectChooser(domSelector, options) {
         this.root.dispatchEvent(event);
     
 	}
-
 
     vanillaSelectChooser.prototype.destroy = function () {
         let already = document.getElementById("main-zone-" + factory.domSelector);
@@ -180,9 +217,6 @@ function vanillaSelectChooser(domSelector, options) {
     }
 
 
-vanillaSelectChooser.prototype.showOptions = function(){
-	console.log(this.userOptions);
-}
 // Polyfills for IE
 if (!('remove' in Element.prototype)) {
     Element.prototype.remove = function () {
