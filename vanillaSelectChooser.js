@@ -8,10 +8,12 @@ v0.10 : First fully working version
 v0.20 : Use of ctrl and shift keys to mimic a select + button add
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
+
 function vanillaSelectChooser(domSelector, options) {
     let factory = this;
     this.domSelector = domSelector;
-    this.root = document.querySelector(domSelector)
+	this.root = document.querySelector(domSelector)
+	this.rootLength = 0;
 	this.options = null;
 	this.lastValue = null;
 	this.isShiftDown = false;
@@ -35,7 +37,8 @@ function vanillaSelectChooser(domSelector, options) {
         if (options.translations != undefined) {
             this.userOptions.translations = options.translations;
         }
-    }
+	}
+	
 	this.handleCloseClick = function(event){
 		let target = event.target;
 		let value = target.parentNode.getAttribute("data-value");
@@ -174,7 +177,7 @@ function vanillaSelectChooser(domSelector, options) {
 		
 		this.titleLeft = document.createElement("div");
 		this.leftSide.appendChild(this.titleLeft);
-		this.titleLeft.setAttribute("style","z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;padding-top:2px;user-select: none;  ")
+		this.titleLeft.setAttribute("style","z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
 		this.titleLeft.innerHTML = factory.userOptions.translations.available;
 		
 		 this.leftSide.addEventListener("scroll", function (e) {
@@ -206,23 +209,40 @@ function vanillaSelectChooser(domSelector, options) {
 		
 		this.titleRight = document.createElement("div");
 		this.rightSide.appendChild(this.titleRight);
-		this.titleRight.setAttribute("style","z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;padding-top:2px;user-select: none; ")
-		this.titleRight.innerHTML = factory.userOptions.translations.chosen;
-		
-		 this.rightSide.addEventListener("scroll", function (e) {
+		this.titleRight.setAttribute("style","z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
+		let titleText = document.createTextNode(factory.userOptions.translations.chosen);
+		this.titleRight.appendChild(titleText);
+		this.trashAll = document.createElement("span");
+		this.titleRight.appendChild(this.trashAll);
+
+		this.makeTrashAll(this.trashAll,"#666","#666","#fff");
+
+		this.trashAll.setAttribute("style","float:right;");
+
+		this.rightSide.addEventListener("scroll", function (e) {
                 var y = this.scrollTop;
                 factory.titleRight.style.top = y + "px";
-          });
+        });
 			
         this.listLeft = document.createElement("ul");
         this.leftSide.appendChild(this.listLeft);
-		this.listLeft.setAttribute("style","padding-top:30px;");
+		this.listLeft.setAttribute("style","margin-top:36px;");
 
         this.listRight = document.createElement("ul");
         this.rightSide.appendChild(this.listRight);
+		this.listRight.setAttribute("style","margin-top:36px");
 
-        this.options = document.querySelectorAll(this.domSelector + " option");
+		this.options = document.querySelectorAll(this.domSelector + " option");
+		
+		this.trashAll.addEventListener("click", function (e) {
+			Array.prototype.slice.call(factory.options).forEach(function (x) {
+					x.removeAttribute("selected");
+				});
+			factory.filter();
+		  });
+		  this.rootLength=0;
         Array.prototype.slice.call(this.options).forEach(function (x) {
+			this.rootLength++;
             let text = x.textContent;
             let value = x.value;
             let li = document.createElement("li");
@@ -317,8 +337,34 @@ function vanillaSelectChooser(domSelector, options) {
 					 x.classList.add("hide");
 				 }
 			 });
-        });
+		});
+		if(selected.length == 0 ){
+			factory.rightSide.style.overflowY = "hidden";
+			factory.leftSide.style.overflowY = "auto";
+		}else if(selected.length == factory.rootLength){
+			factory.rightSide.style.overflowY = "auto";
+			factory.leftSide.style.overflowY = "hidden";
+		}else{
+			factory.rightSide.style.overflowY = "auto";
+			factory.leftSide.style.overflowY = "auto";
+		}
 		factory.privateSendChange();
+	}
+
+	this.makeTrashAll = function(domElement,color,colorLid,colorLine){
+		if(!color) color="black";
+		if(!colorLid) colorLid = "black";
+		if(!colorLine) colorLine = "white";
+		let html = `  
+	<div>
+		<div class="icon-trash" style="float: right">
+		<div class="trash-lid" style="background-color:${colorLid};"></div>
+		<div class="trash-container" style="background-color: ${color};"></div>
+		<div class="trash-line line-1" style="background-color: ${colorLine}"></div>
+		<div class="trash-line line-2" style="background-color: ${colorLine}"></div>
+		<div class="trash-line line-3" style="background-color: ${colorLine}"></div>
+	  </div>`;
+	  domElement.innerHTML = html;
 	}
 
     this.init();
