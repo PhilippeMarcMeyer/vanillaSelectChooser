@@ -235,3 +235,16 @@
 .icon-trash .trash-line.line-3 {
 	left: 62%;
 }
+
+@media screen and (max-width: 600px) {
+	.vanilla-center{
+		display:none !important;
+	}
+	.vanilla-left li.chosen {
+		background: inherit;
+		color:inherit;
+	}
+	.vanilla-right{
+		margin-left:10px !important;
+	}
+}
