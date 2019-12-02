@@ -257,16 +257,19 @@
 
             <script src="./vanillaSelectChooser.js"></script>
             <script>
-                let chooser = new vanillaSelectChooser("#brands", 
-				{
-					minWidth: 180, 
-					maxHeight: 400,
-					addButtonWidth:50,
-					gapBeetween:100
-				});
-				
-                showChosen();
-
+                let chooser;
+                window.addEventListener("DOMContentLoaded",function (event) {
+                    chooser = new vanillaSelectChooser("#brands", 
+                                {
+                                    minWidth: 180, 
+                                    maxHeight: 400,
+                                    addButtonWidth:50,
+                                    gapBeetween:100
+                                });
+                                
+                                showChosen();
+                });
+          
                 function getSelectValues() {
                     let values = [];
                     let options = document.querySelectorAll("#brands option");

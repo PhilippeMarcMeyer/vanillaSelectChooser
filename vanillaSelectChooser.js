@@ -377,15 +377,14 @@ function vanillaSelectChooser(domSelector, options) {
 		if (!color) color = "black";
 		if (!colorLid) colorLid = "black";
 		if (!colorLine) colorLine = "white";
-		let html = `  
-	<div>
-		<div class="icon-trash" style="float: right">
-		<div class="trash-lid" style="background-color:${colorLid};"></div>
-		<div class="trash-container" style="background-color: ${color};"></div>
-		<div class="trash-line line-1" style="background-color: ${colorLine}"></div>
-		<div class="trash-line line-2" style="background-color: ${colorLine}"></div>
-		<div class="trash-line line-3" style="background-color: ${colorLine}"></div>
-	  </div>`;
+		let html = "<div>";
+		html += "<div class='icon-trash' style='float: right'>";
+		html += "<div class='trash-lid' style='background-color:" + colorLid +";'></div>";
+		html += "<div class='trash-container' style='background-color: " + color +";'></div>";
+		html += "<div class='trash-line line-1' style='background-color: " + colorLine +"'></div>";
+		html += "<div class='trash-line line-2' style='background-color: " + colorLine +"'></div>";
+		html += "<div class='trash-line line-3' style='background-color: " + colorLine +"'></div>";
+		html += "</div>";
 		domElement.innerHTML = html;
 	}
 
