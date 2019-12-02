@@ -7,6 +7,7 @@ v0.01 : first prototype Work in progress
 v0.10 : First fully working version
 v0.20 : Use of ctrl and shift keys to mimic a select + button add
 v0.25 : Basic touch screen support (no global Add button (">")) and space reduced to 10 px between the columns
+v0.26 : Correcting destroy() function + adding nous options + css changes
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
 
@@ -23,10 +24,10 @@ function vanillaSelectChooser(domSelector, options) {
 	this.userOptions = {
 		addButtonTitle: "&#x2B86;",
 		addButtonWidth: 60,
-		minWidth: 80,
+		minWidth: 200,
 		maxHeight: 400,
 		gapBeetween: 120,
-		translations: { "available": "Availables", "chosen": "Chosen" },
+		translations: { "available": "Availables", "chosen": "Chosen" }
 	}
 
 	if (options) {
@@ -35,6 +36,12 @@ function vanillaSelectChooser(domSelector, options) {
 		}
 		if (options.maxHeight != undefined) {
 			this.userOptions.maxHeight = options.maxHeight;
+		}
+		if (options.gapBeetween != undefined) {
+			this.userOptions.gapBeetween = options.gapBeetween;
+		}
+		if (options.addButtonWidth != undefined) {
+			this.userOptions.addButtonWidth = options.addButtonWidth;
 		}
 		if (options.translations != undefined) {
 			this.userOptions.translations = options.translations;
@@ -151,6 +158,14 @@ function vanillaSelectChooser(domSelector, options) {
 					}
 				}
 			});
+		}
+	}
+	
+	this.destroy = function () {
+		let already = document.getElementById("main-zone-" + factory.domSelector);
+		if (already) {
+			already.remove();
+			this.root.style.display = "inline-block";
 		}
 	}
 
@@ -385,14 +400,6 @@ vanillaSelectChooser.prototype.privateSendChange = function () {
 
 }
 
-vanillaSelectChooser.prototype.destroy = function () {
-	let already = document.getElementById("main-zone-" + factory.domSelector);
-	if (already) {
-		already.remove();
-		this.root.style.display = "inline-block";
-	}
-
-}
 
 
 // Polyfills for IE
