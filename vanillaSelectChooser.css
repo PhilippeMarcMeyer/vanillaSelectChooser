@@ -133,6 +133,7 @@
 }
 
 .vanilla-main ul{
+  -ms-user-select: none;
   user-select:none;
   list-style:none;
   white-space: nowrap;

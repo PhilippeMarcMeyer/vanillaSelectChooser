@@ -1,11 +1,11 @@
-# vanillaSelectChooser
+# vanillaSelectChooser 
 takes a select multiple drop down and transforms it into 2 lists : to choose on the left, chosen on the right
 
 ![screen shot](https://raw.githubusercontent.com/PhilippeMarcMeyer/vanillaSelectChooser/master/vanillaSelectChooser.jpg)
 
 ### Demo :
 
-https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html
+https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html?v=0.27
 
 ### Use :
 
@@ -67,6 +67,9 @@ function getSelectValues() {
 ```
 
 ### History :
+
+v0.27 : IE 11 Compatibility :-(
+
 v0.26 : Correcting destroy() function + adding nous options + css changes
 
 v0.25 : Basic touch screen support (no global Add button (">")) and space reduced to 10 px between the columns

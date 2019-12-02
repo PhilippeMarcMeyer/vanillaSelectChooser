@@ -8,6 +8,7 @@ v0.10 : First fully working version
 v0.20 : Use of ctrl and shift keys to mimic a select + button add
 v0.25 : Basic touch screen support (no global Add button (">")) and space reduced to 10 px between the columns
 v0.26 : Correcting destroy() function + adding nous options + css changes
+v0.27 : IE 11 Compatibility
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
 
@@ -95,6 +96,8 @@ function vanillaSelectChooser(domSelector, options) {
 			}
 		});
 		factory.filter();
+		let minWidth = factory.listLeft.style.minWith;
+		factory.listLeft.style.minWith = minWidth;
 	}
 
 	this.handleSimpleClick = function (event) {
@@ -218,12 +221,20 @@ function vanillaSelectChooser(domSelector, options) {
 		this.rightSide = document.createElement("div");
 		this.main.appendChild(this.rightSide);
 		this.rightSide.classList.add("vanilla-right");
-		this.rightSide.setAttribute("style", "display:inline-block;position:relative;float:left;overflow-y:auto;");
+		this.rightSide.setAttribute("style", "display:inline-block;float:left;overflow-y:auto;margin-top:0;");
 		this.rightSide.style.float = "left";
 		this.rightSide.style.minWidth = factory.userOptions.minWidth + "px";
 		this.rightSide.style.maxHeight = factory.userOptions.maxHeight + "px";
 		this.rightSide.style.marginLeft = centerMargins + "px";
 
+		if(window.navigator.userAgent.indexOf("Trident")!=-1){
+			this.rightSide.style.position = "absolute";
+			this.rightSide.style.left = (factory.userOptions.gapBeetween +factory.userOptions.minWidth) + "px";
+			this.centerSide.style.position = "absolute";
+		}else{
+			this.rightSide.style.position = "relative";
+		}
+		
 		this.titleRight = document.createElement("div");
 		this.rightSide.appendChild(this.titleRight);
 		this.titleRight.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
@@ -323,7 +334,6 @@ function vanillaSelectChooser(domSelector, options) {
 		}
 
 		this.addButton.addEventListener("click", factory.handleAddBtnClick)
-
 		if (this.isTouchScreen) {
 			this.main.querySelector(".vanilla-center").style.display = "none";
 			this.main.querySelector(".vanilla-right").style.marginLeft = "10px";
@@ -425,3 +435,4 @@ function is_touch_device() { // from bolmaster2 - stackoverflow
 	var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
 	return mq(query);
 }
+
