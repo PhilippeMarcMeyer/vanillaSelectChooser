@@ -121,6 +121,8 @@
 .vanilla-center .vanilla-btn{
 	font-size: 24px;
 	color:#3366aa;
+	background-color:transparent;
+	padding-bottom:2px;
 }
 
 .vanilla-center .arrow:hover{

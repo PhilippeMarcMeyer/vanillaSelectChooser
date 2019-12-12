@@ -22,6 +22,7 @@ function vanillaSelectChooser(domSelector, options) {
 	this.lastValue = null;
 	this.isShiftDown = false;
 	this.isCtrlDown = false;
+	this.maxIndex = 0;
 	this.userOptions = {
 		addButtonTitle: "&#x2B86;",
 		addButtonWidth: 60,
@@ -85,6 +86,8 @@ function vanillaSelectChooser(domSelector, options) {
 	this.handleAddBtnClick = function (event) {
 		let leftListChosen = factory.listLeft.querySelectorAll("li.chosen");
 		let chosenList = [];
+
+		// get sort 
 		Array.prototype.slice.call(leftListChosen).forEach(function (x) {
 			let value = x.getAttribute("data-value");
 			chosenList.push(value);
@@ -197,7 +200,7 @@ function vanillaSelectChooser(domSelector, options) {
 
 		this.titleLeft = document.createElement("div");
 		this.leftSide.appendChild(this.titleLeft);
-		this.titleLeft.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
+		this.titleLeft.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:14px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
 		this.titleLeft.innerHTML = factory.userOptions.translations.available;
 
 		this.leftSide.addEventListener("scroll", function (e) {
@@ -237,7 +240,7 @@ function vanillaSelectChooser(domSelector, options) {
 		
 		this.titleRight = document.createElement("div");
 		this.rightSide.appendChild(this.titleRight);
-		this.titleRight.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
+		this.titleRight.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:14px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
 		let titleText = document.createTextNode(factory.userOptions.translations.chosen);
 		this.titleRight.appendChild(titleText);
 		this.trashAll = document.createElement("span");
@@ -346,10 +349,13 @@ function vanillaSelectChooser(domSelector, options) {
 		factory.lastValue = null;
 		if (!chosenList) chosenList = [];
 		let selected = [];
+		let orders = [];
 		Array.prototype.slice.call(this.options).forEach(function (x) {
 			let isSelected = x.hasAttribute("selected");
 			if (isSelected) {
 				selected.push(x.value);
+				let sortOrder=x.getAttribute("sort") || "0";
+				orders.push(sortOrder);
 			}
 			let leftList = factory.listLeft.querySelectorAll("li");
 			Array.prototype.slice.call(leftList).forEach(function (x) {
@@ -363,10 +369,14 @@ function vanillaSelectChooser(domSelector, options) {
 			let rightList = factory.listRight.querySelectorAll("li");
 			Array.prototype.slice.call(rightList).forEach(function (x) {
 				let value = x.getAttribute("data-value");
-				if (selected.indexOf(value) != -1) {
+				let index = selected.indexOf(value);
+				if (index != -1) {
 					x.classList.remove("hide");
+					x.setAttribute("sort",orders[index])
 				} else {
 					x.classList.add("hide");
+					x.setAttribute("sort",0);
+
 				}
 			});
 		});
