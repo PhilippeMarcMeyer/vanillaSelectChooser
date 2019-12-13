@@ -8,7 +8,7 @@ v0.10 : First fully working version
 v0.20 : Use of ctrl and shift keys to mimic a select + button add
 v0.25 : Basic touch screen support (no global Add button (">")) and space reduced to 10 px between the columns
 v0.26 : Correcting destroy() function + adding nous options + css changes
-v0.27 : IE 11 Compatibility
+v0.30 : Sortable (new comception)
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
 
@@ -22,6 +22,7 @@ function vanillaSelectChooser(domSelector, options) {
 	this.lastValue = null;
 	this.isShiftDown = false;
 	this.isCtrlDown = false;
+	this.maxIndex = 0;
 	this.userOptions = {
 		addButtonTitle: "&#x2B86;",
 		addButtonWidth: 60,
@@ -85,6 +86,8 @@ function vanillaSelectChooser(domSelector, options) {
 	this.handleAddBtnClick = function (event) {
 		let leftListChosen = factory.listLeft.querySelectorAll("li.chosen");
 		let chosenList = [];
+
+		// get sort 
 		Array.prototype.slice.call(leftListChosen).forEach(function (x) {
 			let value = x.getAttribute("data-value");
 			chosenList.push(value);
@@ -197,7 +200,7 @@ function vanillaSelectChooser(domSelector, options) {
 
 		this.titleLeft = document.createElement("div");
 		this.leftSide.appendChild(this.titleLeft);
-		this.titleLeft.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
+		this.titleLeft.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:14px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
 		this.titleLeft.innerHTML = factory.userOptions.translations.available;
 
 		this.leftSide.addEventListener("scroll", function (e) {
@@ -237,7 +240,7 @@ function vanillaSelectChooser(domSelector, options) {
 		
 		this.titleRight = document.createElement("div");
 		this.rightSide.appendChild(this.titleRight);
-		this.titleRight.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:16px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
+		this.titleRight.setAttribute("style", "z-index:999;position:absolute;left:0px;width:100%;text-align:center;font-size:14px;font-weight:bold;background-color:#fff;min-height:30px;max-height:30px;padding-top:6px;user-select: none; ")
 		let titleText = document.createTextNode(factory.userOptions.translations.chosen);
 		this.titleRight.appendChild(titleText);
 		this.trashAll = document.createElement("span");
@@ -262,6 +265,20 @@ function vanillaSelectChooser(domSelector, options) {
 
 		this.options = document.querySelectorAll(this.domSelector + " option");
 
+
+		this.listRight.addEventListener("exchange", function (e) {
+			let message = e.detail;
+			Array.prototype.slice.call(factory.options).forEach(function (x) {
+				if(x.value == message.src.value){
+					x.setAttribute("sort",message.dest.sort) ;
+				}
+				if(x.value == message.dest.value){
+					x.setAttribute("sort",message.src.sort) ;
+				}
+			});
+			factory.filter();
+		});
+
 		this.trashAll.addEventListener("click", function (e) {
 			Array.prototype.slice.call(factory.options).forEach(function (x) {
 				x.removeAttribute("selected");
@@ -270,6 +287,8 @@ function vanillaSelectChooser(domSelector, options) {
 		});
 		this.rootLength = 0;
 		Array.prototype.slice.call(this.options).forEach(function (x) {
+			// building the left lesf with each option
+			// we'll later hide the selected one (in filter())
 			this.rootLength++;
 			let text = x.textContent;
 			let value = x.value;
@@ -278,23 +297,11 @@ function vanillaSelectChooser(domSelector, options) {
 			li.setAttribute("data-value", value);
 			li.setAttribute("data-text", text);
 			li.appendChild(document.createTextNode(text));
-
-			let li2 = document.createElement("li");
-			factory.listRight.appendChild(li2);
-			li2.setAttribute("data-value", value);
-			li2.setAttribute("data-text", text);
-			li2.appendChild(document.createTextNode(text));
-			let span = document.createElement("span");
-			span.innerHTML = "&nbsp;x&nbsp;"
-			li2.appendChild(span);
-			span.classList.add("vanilla-close");
-
 			let span2 = document.createElement("span");
-
 			span2.setAttribute("class", "arrow-sml right");
-
 			li.appendChild(span2);
 			span2.classList.add("vanilla-add");
+
 		});
 		factory.filter();
 		let leftList = factory.listLeft.querySelectorAll("li");
@@ -305,11 +312,6 @@ function vanillaSelectChooser(domSelector, options) {
 		let leftSign = factory.listLeft.querySelectorAll(".vanilla-add");
 		Array.prototype.slice.call(leftSign).forEach(function (x) {
 			x.addEventListener("click", factory.handleAddClick);
-		});
-
-		let rightSign = factory.listRight.querySelectorAll(".vanilla-close");
-		Array.prototype.slice.call(rightSign).forEach(function (x) {
-			x.addEventListener("click", factory.handleCloseClick);
 		});
 
 		this.isShiftDown = false;
@@ -346,24 +348,25 @@ function vanillaSelectChooser(domSelector, options) {
 		factory.lastValue = null;
 		if (!chosenList) chosenList = [];
 		let selected = [];
+		let orders = [];
+		let labels = [];
+		// empty the right UL
+		factory.listRight.innerHTML = "";
+		
 		Array.prototype.slice.call(this.options).forEach(function (x) {
 			let isSelected = x.hasAttribute("selected");
 			if (isSelected) {
 				selected.push(x.value);
+				let sortOrder = x.getAttribute("sort") || "0";
+				orders.push(sortOrder);
+				labels.push(x.innerHTML);
+			}else{
+				x.setAttribute("sort","0");
 			}
 			let leftList = factory.listLeft.querySelectorAll("li");
 			Array.prototype.slice.call(leftList).forEach(function (x) {
 				let value = x.getAttribute("data-value");
 				if (selected.indexOf(value) == -1) {
-					x.classList.remove("hide");
-				} else {
-					x.classList.add("hide");
-				}
-			});
-			let rightList = factory.listRight.querySelectorAll("li");
-			Array.prototype.slice.call(rightList).forEach(function (x) {
-				let value = x.getAttribute("data-value");
-				if (selected.indexOf(value) != -1) {
 					x.classList.remove("hide");
 				} else {
 					x.classList.add("hide");
@@ -380,6 +383,61 @@ function vanillaSelectChooser(domSelector, options) {
 			factory.rightSide.style.overflowY = "auto";
 			factory.leftSide.style.overflowY = "auto";
 		}
+		let selectSortedValues = [];
+		let newOrder = 1000000;
+		selected.forEach(function(x,i){
+			
+			let order= parseInt(orders[i]);
+			if(order==0) {
+				newOrder++;
+				order = newOrder;
+			}
+			selectSortedValues.push({key:x,sort:order,label:labels[i]});
+		});
+		selectSortedValues = selectSortedValues.sort(function(a,b){
+			if (a.sort > b.sort)
+				return 1;
+				else
+				return -1;
+		});
+		selectSortedValues.forEach(function(x,i){
+			x.sort = i+1;
+		});
+		// report sort attribute in custum sort attribute of the select
+		Array.prototype.slice.call(this.options).forEach(function (x) {
+			if( x.hasAttribute("selected")){
+				let extract = selectSortedValues.filter(function(y){
+					return  x.getAttribute("value") == y.key;
+				});
+				if(extract.length == 1){
+					x.setAttribute("sort",extract[0].sort);
+				}
+			}
+		});
+	   
+	   selectSortedValues.forEach(function(x,i){
+		let li2 = document.createElement("li");
+			factory.listRight.appendChild(li2);
+			li2.setAttribute("data-value", x.key);
+			li2.setAttribute("data-text", x.label);
+			li2.setAttribute("data-sort", x.sort);
+			li2.setAttribute("ondrop","VSC_drop(event)");
+			li2.setAttribute("ondragover","VSC_allowDrop(event)");
+			li2.setAttribute("ondragstart","VSC_drag(event)");
+			li2.setAttribute("draggable","true");
+
+			li2.appendChild(document.createTextNode(x.sort+".  " +x.label));
+			let span = document.createElement("span");
+			span.innerHTML = "&nbsp;x&nbsp;"
+			li2.appendChild(span);
+			span.classList.add("vanilla-close");
+		});
+
+		let rightSign = factory.listRight.querySelectorAll(".vanilla-close");
+		Array.prototype.slice.call(rightSign).forEach(function (x) {
+			x.addEventListener("click", factory.handleCloseClick);
+		});
+
 		factory.privateSendChange();
 	}
 
@@ -398,18 +456,18 @@ function vanillaSelectChooser(domSelector, options) {
 		domElement.innerHTML = html;
 	}
 
+
 	this.init();
 }
 
 
 vanillaSelectChooser.prototype.privateSendChange = function () {
+
 	let event = document.createEvent('HTMLEvents');
 	event.initEvent('change', true, false);
 	this.root.dispatchEvent(event);
 
 }
-
-
 
 // Polyfills for IE
 if (!('remove' in Element.prototype)) {
@@ -435,4 +493,37 @@ function is_touch_device() { // from bolmaster2 - stackoverflow
 	var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
 	return mq(query);
 }
+
+	function VSC_allowDrop(ev) {
+		ev.preventDefault();
+	}
+
+	function VSC_drag(ev) {
+		let target = ev.target;
+		let data = {};
+		data.value = target.getAttribute('data-value');
+		data.text = target.getAttribute('data-text');
+		data.sort = target.getAttribute('data-sort');
+		ev.dataTransfer.setData('text/plain', JSON.stringify({
+			'data': data
+		}));
+	}
+
+	function VSC_drop(ev) {
+		ev.preventDefault();
+		let src = JSON.parse(ev.dataTransfer.getData('text'));
+		if (src) {
+			src = src.data;
+		}
+		let target = ev.target;
+		let dest = {};
+		dest.value = target.getAttribute('data-value');
+		dest.text = target.getAttribute('data-text');
+		dest.sort = target.getAttribute('data-sort');
+		let ul = target.parentNode;
+		if (src.value != dest.value) {
+			let event = new CustomEvent('exchange', { detail: {src:src,dest:dest} });
+			ul.dispatchEvent(event);
+		}
+	}
 

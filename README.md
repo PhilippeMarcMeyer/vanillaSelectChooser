@@ -5,7 +5,7 @@ takes a select multiple drop down and transforms it into 2 lists : to choose on 
 
 ### Demo :
 
-https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html?v=0.27
+https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html?v=0.30
 
 ### Use :
 
@@ -67,6 +67,8 @@ function getSelectValues() {
 ```
 
 ### History :
+
+v0.30 : Sortable (new conception)
 
 v0.27 : IE 11 Compatibility :-(
 
