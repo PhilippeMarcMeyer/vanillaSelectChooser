@@ -8,7 +8,8 @@ v0.10 : First fully working version
 v0.20 : Use of ctrl and shift keys to mimic a select + button add
 v0.25 : Basic touch screen support (no global Add button (">")) and space reduced to 10 px between the columns
 v0.26 : Correcting destroy() function + adding nous options + css changes
-v0.30 : Sortable (new comception)
+v0.30 : Sortable by drag and drop (new conception)
+v0.35 : Drag and Drop multiple from left to right column
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
 
@@ -265,17 +266,21 @@ function vanillaSelectChooser(domSelector, options) {
 
 		this.options = document.querySelectorAll(this.domSelector + " option");
 
-
 		this.listRight.addEventListener("exchange", function (e) {
 			let message = e.detail;
-			Array.prototype.slice.call(factory.options).forEach(function (x) {
-				if(x.value == message.src.value){
-					x.setAttribute("sort",message.dest.sort) ;
-				}
-				if(x.value == message.dest.value){
-					x.setAttribute("sort",message.src.sort) ;
-				}
-			});
+			let destSort = 0;
+			if(message.src.side=="vanilla-left"){
+				destSort = parseFloat(message.dest.sort)-0.5;
+				let values = message.src.others;
+				Array.prototype.slice.call(factory.options).forEach(function (x) {
+					if(values.indexOf(x.value)!=-1){
+						destSort+= 0.01;
+						x.setAttribute("sort",destSort) ;
+						x.setAttribute("selected",true) ;
+						x.classList.remove("chosen");
+					}
+				});
+			}
 			factory.filter();
 		});
 
@@ -296,6 +301,10 @@ function vanillaSelectChooser(domSelector, options) {
 			factory.listLeft.appendChild(li);
 			li.setAttribute("data-value", value);
 			li.setAttribute("data-text", text);
+			li.setAttribute("ondrop","VSC_drop(event)");
+			li.setAttribute("ondragover","VSC_allowDrop(event)");
+			li.setAttribute("ondragstart","VSC_drag(event)");
+			li.setAttribute("draggable","true");
 			li.appendChild(document.createTextNode(text));
 			let span2 = document.createElement("span");
 			span2.setAttribute("class", "arrow-sml right");
@@ -387,7 +396,7 @@ function vanillaSelectChooser(domSelector, options) {
 		let newOrder = 1000000;
 		selected.forEach(function(x,i){
 			
-			let order= parseInt(orders[i]);
+			let order= parseFloat(orders[i]);
 			if(order==0) {
 				newOrder++;
 				order = newOrder;
@@ -500,10 +509,26 @@ function is_touch_device() { // from bolmaster2 - stackoverflow
 
 	function VSC_drag(ev) {
 		let target = ev.target;
+		let whichSide = target.parentNode.parentNode.className;
+		//let select = target.closest(".vanilla-main");
+		//let arr = select.getAttribute('id').split("-#");
+		//let VSCId = arr[1];
 		let data = {};
 		data.value = target.getAttribute('data-value');
 		data.text = target.getAttribute('data-text');
 		data.sort = target.getAttribute('data-sort');
+		data.side = whichSide;
+		data.others = [];
+		if(whichSide=="vanilla-left"){
+		//	let selectDOM = document.getElementById(VSCId)
+			let leftList = target.parentNode.querySelectorAll("li.chosen");
+			if(leftList.length != 0){
+				Array.prototype.slice.call(leftList).forEach(function (x) {
+						data.others.push(x.getAttribute('data-value'));
+				});
+			}
+		}
+		console.log(data);
 		ev.dataTransfer.setData('text/plain', JSON.stringify({
 			'data': data
 		}));
@@ -527,3 +552,17 @@ function is_touch_device() { // from bolmaster2 - stackoverflow
 		}
 	}
 
+	if (!Element.prototype.matches)
+    Element.prototype.matches = Element.prototype.msMatchesSelector || 
+                                Element.prototype.webkitMatchesSelector;
+
+if (!Element.prototype.closest)
+    Element.prototype.closest = function(s) {
+        var el = this;
+        if (!document.documentElement.contains(el)) return null;
+        do {
+            if (el.matches(s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType == 1); 
+        return null;
+    };
