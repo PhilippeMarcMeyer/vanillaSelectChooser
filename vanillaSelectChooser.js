@@ -314,8 +314,6 @@ function vanillaSelectChooser(domSelector, options) {
 			factory.listLeft.appendChild(li);
 			li.setAttribute("data-value", value);
 			li.setAttribute("data-text", text);
-			li.setAttribute("ondrop","VSC_drop(event)");
-			li.setAttribute("ondragover","VSC_allowDrop(event)");
 			li.setAttribute("ondragstart","VSC_drag(event)");
 			li.setAttribute("draggable","true");
 			li.appendChild(document.createTextNode(text));
