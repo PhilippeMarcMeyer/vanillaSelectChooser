@@ -283,6 +283,15 @@ function vanillaSelectChooser(domSelector, options) {
 						x.classList.remove("chosen");
 					}
 				});
+			}else{
+				Array.prototype.slice.call(factory.options).forEach(function (x) {
+					if(x.value==message.src.value){
+						destSort = message.dest.value - 0.5;
+						x.setAttribute("sort",destSort) ;
+						x.setAttribute("selected",true) ;
+						x.classList.remove("chosen");
+					}
+				});				
 			}
 			factory.privateSendChange();
 			factory.filter();
