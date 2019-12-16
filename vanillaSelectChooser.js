@@ -272,6 +272,9 @@ function vanillaSelectChooser(domSelector, options) {
 			if(message.src.side=="vanilla-left"){
 				destSort = parseFloat(message.dest.sort)-0.5;
 				let values = message.src.others;
+				if(values.indexOf(message.src.value)==-1){
+					values.unshift(message.src.value);
+				}
 				Array.prototype.slice.call(factory.options).forEach(function (x) {
 					if(values.indexOf(x.value)!=-1){
 						destSort+= 0.01;
