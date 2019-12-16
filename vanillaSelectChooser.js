@@ -284,6 +284,7 @@ function vanillaSelectChooser(domSelector, options) {
 					}
 				});
 			}
+			factory.privateSendChange();
 			factory.filter();
 		});
 
