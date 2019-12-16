@@ -275,10 +275,18 @@
                     let options = document.querySelectorAll("#brands option");
                     Array.prototype.slice.call(options).forEach(function (x) {
                         if (x.hasAttribute("selected")) {
-                            values.push(x.value);
+                            values.push({"val":x.value,"sort":parseInt(x.getAttribute("sort"))});
                         }
                     });
-                    return values;
+					if(values.length > 0){
+						values = values.sort(function(a,b){
+							return a.sort - b.sort;
+						});
+					}
+					let output = values.map(function(x){
+						return x.val;
+					});
+                    return output;
                 }
 				
                 function showChosen() {

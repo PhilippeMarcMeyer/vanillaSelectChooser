@@ -286,7 +286,7 @@ function vanillaSelectChooser(domSelector, options) {
 			}else{
 				Array.prototype.slice.call(factory.options).forEach(function (x) {
 					if(x.value==message.src.value){
-						destSort = message.dest.value - 0.5;
+						destSort = message.dest.sort - 0.5;
 						x.setAttribute("sort",destSort) ;
 						x.setAttribute("selected",true) ;
 						x.classList.remove("chosen");
@@ -523,9 +523,6 @@ function is_touch_device() { // from bolmaster2 - stackoverflow
 	function VSC_drag(ev) {
 		let target = ev.target;
 		let whichSide = target.parentNode.parentNode.className;
-		//let select = target.closest(".vanilla-main");
-		//let arr = select.getAttribute('id').split("-#");
-		//let VSCId = arr[1];
 		let data = {};
 		data.value = target.getAttribute('data-value');
 		data.text = target.getAttribute('data-text');
@@ -533,7 +530,6 @@ function is_touch_device() { // from bolmaster2 - stackoverflow
 		data.side = whichSide;
 		data.others = [];
 		if(whichSide=="vanilla-left"){
-		//	let selectDOM = document.getElementById(VSCId)
 			let leftList = target.parentNode.querySelectorAll("li.chosen");
 			if(leftList.length != 0){
 				Array.prototype.slice.call(leftList).forEach(function (x) {
@@ -541,7 +537,6 @@ function is_touch_device() { // from bolmaster2 - stackoverflow
 				});
 			}
 		}
-		console.log(data);
 		ev.dataTransfer.setData('text/plain', JSON.stringify({
 			'data': data
 		}));
