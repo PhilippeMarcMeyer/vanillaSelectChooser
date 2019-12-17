@@ -397,6 +397,9 @@ function vanillaSelectChooser(domSelector, options) {
 				} else {
 					x.classList.add("hide");
 				}
+				if(lastlyDropped.indexOf(value)!=-1){
+					x.classList.remove("chosen");
+				}
 			});
 		});
 		if (selected.length == 0) {
