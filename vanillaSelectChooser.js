@@ -10,6 +10,7 @@ v0.25 : Basic touch screen support (no global Add button (">")) and space reduce
 v0.26 : Correcting destroy() function + adding nous options + css changes
 v0.30 : Sortable by drag and drop (new conception)
 v0.35 : Drag and Drop multiple from left to right column
+v0.36 : Nice effects
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
 
@@ -70,7 +71,7 @@ function vanillaSelectChooser(domSelector, options) {
 				x.setAttribute("selected", true);
 			}
 		});
-		factory.filter();
+		factory.filter([value]);
 	}
 
 	this.handleListDoubleClick = function (event) {
@@ -81,7 +82,7 @@ function vanillaSelectChooser(domSelector, options) {
 				x.setAttribute("selected", true);
 			}
 		});
-		factory.filter();
+		factory.filter([value]);
 	}
 
 	this.handleAddBtnClick = function (event) {
@@ -93,13 +94,14 @@ function vanillaSelectChooser(domSelector, options) {
 			let value = x.getAttribute("data-value");
 			chosenList.push(value);
 			x.classList.remove("chosen");
+
 		});
 		Array.prototype.slice.call(factory.options).forEach(function (x) {
 			if (chosenList.indexOf(x.value) != -1) {
 				x.setAttribute("selected", true);
 			}
 		});
-		factory.filter();
+		factory.filter(chosenList);
 		let minWidth = factory.listLeft.style.minWith;
 		factory.listLeft.style.minWith = minWidth;
 	}
@@ -269,11 +271,13 @@ function vanillaSelectChooser(domSelector, options) {
 		this.listRight.addEventListener("exchange", function (e) {
 			let message = e.detail;
 			let destSort = 0;
+			let lastlyDropped = [];
 			if(message.src.side=="vanilla-left"){
 				destSort = parseFloat(message.dest.sort)-0.5;
 				let values = message.src.others;
 				if(values.indexOf(message.src.value)==-1){
 					values.unshift(message.src.value);
+					lastlyDropped.push(message.src.value);
 				}
 				Array.prototype.slice.call(factory.options).forEach(function (x) {
 					if(values.indexOf(x.value)!=-1){
@@ -281,6 +285,7 @@ function vanillaSelectChooser(domSelector, options) {
 						x.setAttribute("sort",destSort) ;
 						x.setAttribute("selected",true) ;
 						x.classList.remove("chosen");
+						lastlyDropped.push(x.value);
 					}
 				});
 			}else{
@@ -290,11 +295,12 @@ function vanillaSelectChooser(domSelector, options) {
 						x.setAttribute("sort",destSort) ;
 						x.setAttribute("selected",true) ;
 						x.classList.remove("chosen");
+						lastlyDropped.push(x.value);
 					}
 				});				
 			}
 			factory.privateSendChange();
-			factory.filter();
+			factory.filter(lastlyDropped);
 		});
 
 		this.trashAll.addEventListener("click", function (e) {
@@ -362,11 +368,11 @@ function vanillaSelectChooser(domSelector, options) {
 		}
 	}
 
-	this.filter = function (chosenList) {
+	this.filter = function (lastlyDropped) {
 		this.isShiftDown = false;
 		this.isCtrlDown = false;
 		factory.lastValue = null;
-		if (!chosenList) chosenList = [];
+		if (!lastlyDropped) lastlyDropped = [];
 		let selected = [];
 		let orders = [];
 		let labels = [];
@@ -445,7 +451,9 @@ function vanillaSelectChooser(domSelector, options) {
 			li2.setAttribute("ondragover","VSC_allowDrop(event)");
 			li2.setAttribute("ondragstart","VSC_drag(event)");
 			li2.setAttribute("draggable","true");
-
+			if(lastlyDropped.indexOf(x.key)!=-1){
+				li2.classList.add("vanilla-dropped");
+			}
 			li2.appendChild(document.createTextNode(x.sort+".  " +x.label));
 			let span = document.createElement("span");
 			span.innerHTML = "&nbsp;x&nbsp;"
@@ -459,6 +467,17 @@ function vanillaSelectChooser(domSelector, options) {
 		});
 
 		factory.privateSendChange();
+
+		let freshlyDropped = factory.listRight.querySelectorAll(".vanilla-dropped");
+		if (freshlyDropped.length>0) {
+			let timing = 1200;
+			Array.prototype.slice.call(freshlyDropped).forEach(function (x) {
+				timing += 100;
+				setTimeout(function () {
+					x.classList.remove("vanilla-dropped")
+				}, timing)
+			});
+		}	
 	}
 
 	this.makeTrashAll = function (domElement, color, colorLid, colorLine) {
