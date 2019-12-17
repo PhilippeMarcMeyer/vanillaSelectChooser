@@ -11,13 +11,13 @@
     <!-- internal css -->
     <style>
         h5 {
-            color: #2e44b9;
+            color: #3480D7;
             font-weight: bold;
             font-size: 24px;
         }
 
         p {
-            color: #2e44b9;
+            color: #3480D7;
             font-size: 16px;
         }
 
@@ -249,25 +249,25 @@
         <p>Chosen items from the select :</p>
         &nbsp;<div id="vanilla-result"></div>
     </div>
-	<div>
+    <div style="margin-left:46px;">
 	<p>Actions</p>
 		<button id="demo-destroy" class="demo">Destroy</button>			<button id="demo-init" class="demo">Init</button>	
 
-    <div />
+    </div>
 
             <script src="./vanillaSelectChooser.js"></script>
             <script>
-                let chooser;
-                window.addEventListener("DOMContentLoaded",function (event) {
-                    chooser = new vanillaSelectChooser("#brands", 
-                                {
-                                    minWidth: 180, 
-                                    maxHeight: 400,
-                                    addButtonWidth:50,
-                                    gapBeetween:100
-                                });
-                                
-                                showChosen();
+                let chooser = null;
+                window.addEventListener("DOMContentLoaded", function (event) {
+                    chooser = new vanillaSelectChooser("#brands",
+                        {
+                            minWidth: 180,
+                            maxHeight: 400,
+                            addButtonWidth: 50,
+                            gapBeetween: 100
+                        });
+
+                    showChosen();
                 });
           
                 function getSelectValues() {
