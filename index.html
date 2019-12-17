@@ -187,7 +187,7 @@
 
     <div id="container">
         <div style="padding:0">
-            <h5>vanillaSelectChooser v.27 </h5>
+            <h5>vanillaSelectChooser v.35 : Drag and Drop multiple from left to right column </h5>
             <p>Takes a select ! Results are available in the hidden select thru change event</p>
         </div>
         <div class="demo-zone" id="demo">
@@ -275,10 +275,18 @@
                     let options = document.querySelectorAll("#brands option");
                     Array.prototype.slice.call(options).forEach(function (x) {
                         if (x.hasAttribute("selected")) {
-                            values.push(x.value);
+                            values.push({"val":x.value,"sort":parseInt(x.getAttribute("sort"))});
                         }
                     });
-                    return values;
+					if(values.length > 0){
+						values = values.sort(function(a,b){
+							return a.sort - b.sort;
+						});
+					}
+					let output = values.map(function(x){
+						return x.val;
+					});
+                    return output;
                 }
 				
                 function showChosen() {

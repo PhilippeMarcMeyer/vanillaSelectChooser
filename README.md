@@ -5,7 +5,7 @@ takes a select multiple drop down and transforms it into 2 lists : to choose on 
 
 ### Demo :
 
-https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html?v=0.27
+https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html?v=0.35
 
 ### Use :
 
@@ -67,6 +67,10 @@ function getSelectValues() {
 ```
 
 ### History :
+
+v0.35 : Drag and Drop multiple from left to right column and sorting modified (the dropped element is placed just before le target element)
+
+v0.30 : Sortable by Drag and Drop (new conception)
 
 v0.27 : IE 11 Compatibility :-(
 
