@@ -1,5 +1,8 @@
 # vanillaSelectChooser 
 takes a select multiple drop down and transforms it into 2 lists : to choose on the left, chosen on the right
+Mimics a select multiple selection mod with Ctrl and shift keys
+Allows drag and drop
+Allow reordering of the chosen items 
 
 ![screen shot](https://raw.githubusercontent.com/PhilippeMarcMeyer/vanillaSelectChooser/master/vanillaSelectChooser2.png)
 
