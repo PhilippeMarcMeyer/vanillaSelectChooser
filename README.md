@@ -1,7 +1,7 @@
 # vanillaSelectChooser 
 takes a select multiple drop down and transforms it into 2 lists : to choose on the left, chosen on the right
 
-![screen shot](https://raw.githubusercontent.com/PhilippeMarcMeyer/vanillaSelectChooser/master/vanillaSelectChooser.jpg)
+![screen shot](https://raw.githubusercontent.com/PhilippeMarcMeyer/vanillaSelectChooser/master/vanillaSelectChooser2.png)
 
 ### Demo :
 
