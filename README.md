@@ -8,7 +8,7 @@ Allow reordering of the chosen items
 
 ### Demo :
 
-https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html?v=0.36
+https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html?v=0.37
 
 ### Use :
 
