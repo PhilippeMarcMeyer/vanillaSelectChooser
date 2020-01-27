@@ -262,14 +262,11 @@
 
 
 .vanilla-right li.vanilla-dropped{
-	background: linear-gradient(#1B7C7A, #2B8C8A); /* #4Ec0FF, #1E90FF 2e44b9*/
-	color:#fff;
-}
-
-.vanilla-right li.vanilla-dropped:hover{
-	background: linear-gradient(#0B5C5A, #1B7C7A); /* #4Ec0FF, #1E90FF 2e44b9*/
+	/*background: linear-gradient(#1B7C7A, #2B8C8A); */
+	color:#2B8C8A;
+	font-weight:bold;
 }
 
 .vanilla-right li.vanilla-dropped .vanilla-close{
-	color:#fff;
+	color:#2B8C8A;
 }

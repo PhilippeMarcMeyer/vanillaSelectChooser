@@ -70,6 +70,9 @@ function getSelectValues() {
 ```
 
 ### History :
+
+v0.37 : IE 11 support
+
 v0.36 : Nice effects
 
 v0.35 : Drag and Drop multiple from left to right column and sorting modified (the dropped element is placed just before le target element)

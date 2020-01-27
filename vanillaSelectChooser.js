@@ -11,8 +11,11 @@ v0.26 : Correcting destroy() function + adding nous options + css changes
 v0.30 : Sortable by drag and drop (new conception)
 v0.35 : Drag and Drop multiple from left to right column
 v0.36 : Nice effects
+v0.37 : IE11 support
 https://github.com/PhilippeMarcMeyer/vanillaSelectChooser
 */
+
+let vanillaSelectChooser_isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
 function vanillaSelectChooser(domSelector, options) {
 	let factory = this;
@@ -443,6 +446,12 @@ function vanillaSelectChooser(domSelector, options) {
 				}
 			}
 		});
+		let oldDropped = factory.listRight.querySelectorAll(".vanilla-dropped");
+		if (oldDropped.length>0) {
+			Array.prototype.slice.call(oldDropped).forEach(function (x,i) {
+				x.classList.remove("vanilla-dropped")
+			});
+		}
 	   
 	   selectSortedValues.forEach(function(x,i){
 		let li2 = document.createElement("li");
@@ -470,17 +479,7 @@ function vanillaSelectChooser(domSelector, options) {
 		});
 
 		factory.privateSendChange();
-
-		let freshlyDropped = factory.listRight.querySelectorAll(".vanilla-dropped");
-		if (freshlyDropped.length>0) {
-			let timing = 1200;
-			Array.prototype.slice.call(freshlyDropped).forEach(function (x) {
-				timing += 100;
-				setTimeout(function () {
-					x.classList.remove("vanilla-dropped")
-				}, timing)
-			});
-		}	
+	
 	}
 
 	this.makeTrashAll = function (domElement, color, colorLid, colorLine) {
@@ -557,7 +556,8 @@ function is_touch_device() { // from bolmaster2 - stackoverflow
 				});
 			}
 		}
-		ev.dataTransfer.setData('text/plain', JSON.stringify({
+	
+		ev.dataTransfer.setData('text', JSON.stringify({
 			'data': data
 		}));
 	}
@@ -594,3 +594,19 @@ if (!Element.prototype.closest)
         } while (el !== null && el.nodeType == 1); 
         return null;
     };
+
+	(function () {
+
+		if ( typeof window.CustomEvent === "function" ) return false;
+   
+		function CustomEvent ( event, params ) {
+			params = params || { bubbles: false, cancelable: false, detail: undefined };
+			var evt = document.createEvent('CustomEvent');
+			evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+			return evt;
+		}
+   
+		CustomEvent.prototype = window.Event.prototype;
+   
+		window.CustomEvent = CustomEvent;
+   })();
