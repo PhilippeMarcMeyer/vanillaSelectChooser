@@ -1,5 +1,5 @@
 {
-    "name": "philippemarcmeyer/vanillaSelectChooser",
+    "name": "philippemarcmeyer/vanillaselectchooser",
     "description": "Transform a select multiple drop down into 2 lists : to choose on the left, chosen on the right",
     "keywords": ["vanilla-js", "plugins", "javascript", "list","select"],
     "type": "library",
@@ -13,9 +13,9 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/PhilippeMarcMeyer/vanillaSelectChooser/issues",
-        "source": "https://github.com/PhilippeMarcMeyer/vanillaSelectChooser",
-        "docs": "https://github.com/PhilippeMarcMeyer/vanillaSelectChooser"
+        "issues": "https://github.com/PhilippeMarcMeyer/vanillaselectchooser/issues",
+        "source": "https://github.com/PhilippeMarcMeyer/vanillaselectchooser",
+        "docs": "https://github.com/PhilippeMarcMeyer/vanillaselectchooser"
     }
 }
 
