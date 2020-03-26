@@ -20,7 +20,7 @@ https://philippemarcmeyer.github.io/vanillaSelectChooser/index.html?v=0.37
 
 #### Instanciate vanillaSelectChooser() :
 
-Example :
+Example :   
 
 ```
 let chooser = new vanillaSelectChooser("#brands", 
